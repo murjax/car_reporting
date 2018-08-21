@@ -61,9 +61,9 @@ describe CarsReport do
   end
 
   describe '#value_report' do
-    it 'generates value report csv' do
-      value_report = "Name,Original Price,Depreciated Amount,Value Category\n2004 Honda Civic,14000,9800.0,Standard\n2006 Toyota Camry,17000,10200.0,Family\n31000\n"
-      expect(cars_report.value_report).to eq(value_report)
+    it 'generates ValueReport' do
+      expect_any_instance_of(ValueReport).to receive(:generate)
+      cars_report.value_report
     end
   end
 
@@ -109,70 +109,10 @@ describe CarsReport do
     end
   end
 
-  describe '#value_report_row' do
-    it 'is name, price, depreciated amount, and value category for car' do
-      row = [car_one.name, car_one.price, cars_report.lost_value(car_one), cars_report.price_category(car_one.price)]
-      expect(cars_report.value_report_row(car_one)).to eq(row)
-    end
-  end
-
-  describe '#value_report_headers' do
-    it 'is array of headers for value report' do
-      headers = ['Name', 'Original Price', 'Depreciated Amount', 'Value Category']
-      expect(cars_report.value_report_headers).to eq(headers)
-    end
-  end
-
-  describe '#lost_value' do
-    it 'is car price minus car depreciated value' do
-      lost_value = car_one.price - car_one.depreciated_value
-      expect(cars_report.lost_value(car_one)).to eq(lost_value)
-    end
-  end
-
-  describe '#price_category' do
-    context 'less than 5000' do
-      it 'is "Budget"' do
-        expect(cars_report.price_category(2000)).to eq('Budget')
-      end
-    end
-
-    context 'less than 10000 and greater than or equal to 5000' do
-      it 'is "Affordable"' do
-        expect(cars_report.price_category(7000)).to eq('Affordable')
-      end
-    end
-
-    context 'less than 15000 and greater than or equal to 10000' do
-      it "is 'Standard'" do
-        expect(cars_report.price_category(13000)).to eq('Standard')
-      end
-    end
-
-    context 'less than 20000 and greater than or equal to 15000' do
-      it "is 'Family'" do
-        expect(cars_report.price_category(16000)).to eq('Family')
-      end
-    end
-
-    context 'greater than or equal to 20000' do
-      it "is 'Luxury'" do
-        expect(cars_report.price_category(23000)).to eq('Luxury')
-      end
-    end
-  end
-
   describe '#unique_cars' do
     let(:car_two) { Car.new('Honda', 'Civic', 2004, 14000, nil) }
     it 'is unique cars by name' do
       expect(cars_report.unique_cars.length).to eq(1)
-    end
-  end
-
-  describe '#total_value' do
-    it 'is sum of car prices' do
-      expected_sum = car_one.price + car_two.price
-      expect(cars_report.total_value).to eq(expected_sum)
     end
   end
 
