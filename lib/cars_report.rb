@@ -1,5 +1,6 @@
 require 'csv'
 require 'value_report'
+require 'sales_report'
 class CarsReport
   attr_reader :cars, :type
   def initialize(cars, type)
@@ -21,12 +22,7 @@ class CarsReport
   end
 
   def sales_report
-    csv = CSV.generate do |csv|
-      csv << sales_report_headers
-      cars.each do |car|
-        csv << sales_report_row(car)
-      end
-    end
+    SalesReport.new(cars).generate
   end
 
   def quantity_report
@@ -45,18 +41,6 @@ class CarsReport
   def quantity_report_row(row_car)
     quantity = cars.select{ |car| car.name == row_car.name }.count
     [row_car.name, quantity]
-  end
-
-  def sales_report_headers
-    ['Name', 'Sold', 'Sale Date']
-  end
-
-  def sales_report_row(car)
-    [car.name, csv_boolean(car.sold?), car.sale_date]
-  end
-
-  def csv_boolean(value)
-    value ? 'Yes' : 'No'
   end
 
   def unique_cars
