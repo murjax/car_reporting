@@ -1,4 +1,5 @@
 require 'csv'
+require 'quantity_report_row'
 class QuantityReport
   attr_reader :cars
   def initialize(cars)
@@ -8,19 +9,14 @@ class QuantityReport
   def generate
     csv = CSV.generate do |csv|
       csv << headers
-      unique_cars.each do |car|
-        csv << row(car)
-      end
+      unique_cars.each { |car| csv << QuantityReportRow.new(car, cars).row }
     end
   end
 
+  private
+
   def headers
     ['Name', 'Quantity']
-  end
-
-  def row(row_car)
-    quantity = cars.select{ |car| car.name == row_car.name }.count
-    [row_car.name, quantity]
   end
 
   def unique_cars
