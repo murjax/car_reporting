@@ -13,32 +13,4 @@ describe SalesReport do
       expect(sales_report.generate).to eq("Name,Sold,Sale Date\n2004 Honda Civic,No,\n2006 Toyota Camry,Yes,2009-11-25\n")
     end
   end
-
-  describe '#row' do
-    it 'is name, sold, and sale date' do
-      row = [car_one.name, sales_report.csv_boolean(car_one.sold?), car_one.sale_date]
-      expect(sales_report.row(car_one)).to eq(row)
-    end
-  end
-
-  describe '#headers' do
-    it 'is array of headers for sales report' do
-      headers = ['Name', 'Sold', 'Sale Date']
-      expect(sales_report.headers).to eq(headers)
-    end
-  end
-
-  describe '#csv_boolean' do
-    context 'true' do
-      it "is 'Yes'" do
-        expect(sales_report.csv_boolean(true)).to eq('Yes')
-      end
-    end
-
-    context 'false' do
-      it "is 'No'" do
-        expect(sales_report.csv_boolean(false)).to eq('No')
-      end
-    end
-  end
 end
