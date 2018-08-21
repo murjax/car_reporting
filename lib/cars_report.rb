@@ -1,6 +1,7 @@
 require 'csv'
 require 'value_report'
 require 'sales_report'
+require 'quantity_report'
 class CarsReport
   attr_reader :cars, :type
   def initialize(cars, type)
@@ -26,12 +27,7 @@ class CarsReport
   end
 
   def quantity_report
-    csv = CSV.generate do |csv|
-      csv << quantity_report_headers
-      unique_cars.each do |car|
-        csv << quantity_report_row(car)
-      end
-    end
+    QuantityReport.new(cars).generate
   end
 
   def quantity_report_headers

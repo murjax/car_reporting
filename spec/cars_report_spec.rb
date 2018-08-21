@@ -75,31 +75,9 @@ describe CarsReport do
   end
 
   describe '#quantity_report' do
-    let(:car_two) { Car.new('Honda', 'Civic', 2004, 14000, nil) }
-    it 'generates quantity report csv' do
-      expect(cars_report.quantity_report).to eq("Name,Quantity\n2004 Honda Civic,2\n")
-    end
-  end
-
-  describe '#quantity_report_row' do
-    let(:car_two) { Car.new('Honda', 'Civic', 2004, 14000, nil) }
-    it 'is name and quantity' do
-      row = [car_one.name, 2]
-      expect(cars_report.quantity_report_row(car_one)).to eq(row)
-    end
-  end
-
-  describe '#quantity_report_headers' do
-    it 'is array of headers for quantity report' do
-      headers = ['Name', 'Quantity']
-      expect(cars_report.quantity_report_headers).to eq(headers)
-    end
-  end
-
-  describe '#unique_cars' do
-    let(:car_two) { Car.new('Honda', 'Civic', 2004, 14000, nil) }
-    it 'is unique cars by name' do
-      expect(cars_report.unique_cars.length).to eq(1)
+    it 'generates QuantityReport' do
+      expect_any_instance_of(QuantityReport).to receive(:generate)
+      cars_report.quantity_report
     end
   end
 end
