@@ -1,4 +1,3 @@
-require 'csv'
 require 'value_report'
 require 'sales_report'
 require 'quantity_report'
@@ -9,37 +8,21 @@ class CarsReport
   end
 
   def generate
-    if cars&.any? && type == :value
-      value_report
-    elsif cars&.any? && type == :quantity
-      quantity_report
-    elsif cars&.any? && type == :sales
-      sales_report
-    end
+    return unless cars&.any? && type
+    value_report || quantity_report || sales_report
   end
 
+  private
+
   def value_report
-    ValueReport.new(cars).generate
+    ValueReport.new(cars).generate if type == :value
   end
 
   def sales_report
-    SalesReport.new(cars).generate
+    SalesReport.new(cars).generate if type == :sales
   end
 
   def quantity_report
-    QuantityReport.new(cars).generate
-  end
-
-  def quantity_report_headers
-    ['Name', 'Quantity']
-  end
-
-  def quantity_report_row(row_car)
-    quantity = cars.select{ |car| car.name == row_car.name }.count
-    [row_car.name, quantity]
-  end
-
-  def unique_cars
-    cars.uniq { |car| car.name }
+    QuantityReport.new(cars).generate if type == :quantity
   end
 end
